@@ -35,6 +35,15 @@ jobs:
       with:
         vcpkgGitCommitId: '2a6371b01420d8820d158b4707e79931feba27aa'
 
+    - name: Output
+      if: always()
+      shell: bash
+      run: |
+        cat /home/runner/work/ActionsTestRepo3/ActionsTestRepo3/vcpkg/buildtrees/shaderc/config-x64-linux-dbg-CMakeCache.txt.log
+        cat /home/runner/work/ActionsTestRepo3/ActionsTestRepo3/vcpkg/buildtrees/shaderc/config-x64-linux-rel-CMakeCache.txt.log
+        cat /home/runner/work/ActionsTestRepo3/ActionsTestRepo3/vcpkg/buildtrees/shaderc/config-x64-linux-out.log
+        cat /home/runner/work/ActionsTestRepo3/ActionsTestRepo3/build/vcpkg_installed/vcpkg/issue_body.md
+
     - name: Configure CMake
       shell: bash
       run: |
