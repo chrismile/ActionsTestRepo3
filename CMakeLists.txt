@@ -28,6 +28,15 @@ else()
     add_executable(ActionsTest ${SOURCES})
 endif()
 
+# Fix for CMake generators with debug/release configuration available at the same time (e.g., Visual Studio).
+# For more details see: https://github.com/Microsoft/vcpkg/issues/2979
+find_path(VCPKG_INSTALL_ROOT_DIR include/spirv-tools/libspirv.h)
+find_path(VCPKG_INCLUDE_DIR spirv-tools/libspirv.h)
+set(VCPKG_DEBUG_LIB_DIR ${VCPKG_INSTALL_ROOT_DIR}/debug/lib)
+set(VCPKG_RELEASE_LIB_DIR ${VCPKG_INSTALL_ROOT_DIR}/lib)
+
+find_package(glslang CONFIG REQUIRED)
+
 if (MSVC)
     find_library(GENERIC_CODE_GEN_LIB_DEBUG GenericCodeGend
             PATHS ${VCPKG_DEBUG_LIB_DIR}
