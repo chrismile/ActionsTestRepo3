@@ -1,0 +1,27 @@
+name: Build using Homebrew
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-latest ]
+
+    runs-on: ${{ matrix.os }}
+    name: "${{ github.workflow }}: ${{ matrix.os }}"
+
+    steps:
+    - name: Install Vulkan SDK
+      shell: bash
+      run: |
+        curl -O https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg
+        sudo hdiutil attach vulkan-sdk.dmg
