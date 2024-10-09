@@ -30,7 +30,7 @@ jobs:
           unzip vulkan-sdk.zip -d vulkan-sdk/
           ls -al
           ls -al vulkan-sdk
-          vulkan_dir="${pwd}/vulkan-sdk"
+          vulkan_dir="$(pwd)/vulkan-sdk"
           echo "${vulkan_dir}"
           sudo "${vulkan_dir}/InstallVulkan.app/Contents/MacOS/InstallVulkan" \
           --root ~/VulkanSDK/$VULKAN_SDK_VERSION --accept-licenses --default-answer --confirm-command install
