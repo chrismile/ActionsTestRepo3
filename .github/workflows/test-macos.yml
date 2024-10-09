@@ -24,4 +24,5 @@ jobs:
       shell: bash
       run: |
         curl -O https://sdk.lunarg.com/sdk/download/latest/mac/vulkan-sdk.dmg
+        ls -al
         sudo hdiutil attach vulkan-sdk.dmg
