@@ -136,12 +136,4 @@ jobs:
       - name: Copy files
         run: |
           proj_name=${{ github.event.repository.name }}
-          mkdir Shipping/Data
-          mkdir Shipping/Data/Meshes
-          mkdir Shipping/Data/TransferFunctions
-          cp -r replicability Shipping/replicability
-          cp -r Data/Fonts Shipping/Data/Fonts
-          cp -r Data/ReplayScripts Shipping/Data/ReplayScripts
-          cp -r Data/Shaders Shipping/Data/Shaders
-          cp Data/TransferFunctions/Standard.xml Shipping/Data/TransferFunctions/Standard.xml
           mv Shipping ${{ env.artifact_name }}

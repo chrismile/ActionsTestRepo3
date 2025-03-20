@@ -762,6 +762,7 @@ if [ $use_macos = false ] && [ $use_msys = false ]; then
 fi
 if [ $use_vcpkg = true ]; then
     params+=(-DPYTHONHOME="./python3")
+    echo "SCRIPT: DPYTHONHOME set"
 fi
 
 if $use_msys; then
@@ -811,6 +812,7 @@ echo "------------------------"
 echo "      generating        "
 echo "------------------------"
 pushd $build_dir >/dev/null
+echo "SCRIPT: PYTHONHOME: ${PYTHONHOME}"
 cmake .. \
     -DCMAKE_BUILD_TYPE=$cmake_config \
     -Dsgl_DIR="$projectpath/third_party/sgl/install/lib/cmake/sgl/" \
