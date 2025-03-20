@@ -24,6 +24,7 @@
 :: OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 :: OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+@echo off
 setlocal
 pushd %~dp0
 
@@ -91,10 +92,27 @@ if defined VCINSTALLDIR (
 if defined VCINSTALLDIR (
     set "x=%VCINSTALLDIR_ESC:Microsoft Visual Studio\\=" & set "VsPathEnd=%"
 )
-if defined VCINSTALLDIR (
-    set cmake_generator=-G "Visual Studio %VisualStudioVersion:~0,2% %VsPathEnd:~0,4%"
+if defined VisualStudioVersion (
+    set "VsVersionNumber=%VisualStudioVersion:~0,2%"
+) else (
+    set VsVersionNumber=0
 )
-if not defined VCINSTALLDIR (
+if defined VisualStudioVersion (
+    if not defined VsPathEnd (
+        if %VsVersionNumber% == 14 (
+            set VsPathEnd=2015
+        ) else if %VsVersionNumber% == 15 (
+            set VsPathEnd=2017
+        ) else if %VsVersionNumber% == 16 (
+            set VsPathEnd=2019
+        ) else if %VsVersionNumber% == 17 (
+            set VsPathEnd=2022
+        )
+    )
+)
+if defined VsPathEnd (
+    set cmake_generator=-G "Visual Studio %VisualStudioVersion:~0,2% %VsPathEnd:~0,4%"
+) else (
     set cmake_generator=
 )
 
@@ -145,6 +163,7 @@ if not exist .\sgl (
     git clone --depth 1 https://github.com/chrismile/sgl.git   || exit /b 1
 )
 
+set cmake_args_sgl=%cmake_args_sgl% -DSUPPORT_VULKAN=OFF
 if not exist .\sgl\install (
     echo ------------------------
     echo      building sgl
