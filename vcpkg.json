@@ -3,6 +3,10 @@
     "name": "actionstestrepo3",
     "version": "0.1.0",
     "dependencies": [
-        "glfw"
+        {
+            "name": "glfw3",
+            "features": [ "wayland" ],
+            "platform": "linux"
+        }
     ]
 }

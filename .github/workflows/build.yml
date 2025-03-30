@@ -115,7 +115,15 @@ jobs:
       - name: Build target
         run: |
           BUILD_ARGS=()
+          sudo apt install -y libgl-dev libxmu-dev libxi-dev libx11-dev libxft-dev libxext-dev libxrandr-dev \
+            libwayland-dev libxkbcommon-dev libxxf86vm-dev libegl1-mesa-dev libglu1-mesa-dev mesa-common-dev \
+            libibus-1.0-dev autoconf automake autoconf-archive libxinerama-dev libxcursor-dev xorg-dev pkg-config \
+            wayland-protocols extra-cmake-modules
           mkdir build
           cd build
-          cmake .. -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_DEFAULT_TRIPLET}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$projectpath/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake"
+          cmake .. -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_DEFAULT_TRIPLET}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${{env.VCPKG_ROOT}}/scripts/buildsystems/vcpkg.cmake"
           make -j $(nproc)
+
+      - name: Build target
+        run: |
+          BUILD_ARGS=()
