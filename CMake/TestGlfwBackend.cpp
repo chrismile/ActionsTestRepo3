@@ -1,7 +1,7 @@
 /*
  * BSD 2-Clause License
  *
- * Copyright (c) 2020, Christoph Neuhauser
+ * Copyright (c) 2025, Christoph Neuhauser
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,23 +25,34 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+ 
+#include <iostream>
+#include <GLFW/glfw3.h>
 
-#ifndef FILTERS_PLANEFILTER_HPP
-#define FILTERS_PLANEFILTER_HPP
+#ifdef TEST_X11
+#define GLFW_EXPOSE_NATIVE_X11
+#endif
+#ifdef TEST_WAYLAND
+#define GLFW_EXPOSE_NATIVE_WAYLAND
+#endif
+#include <GLFW/glfw3native.h>
 
-#include <glm/vec3.hpp>
-#include "HexahedralMeshFilter.hpp"
+int main(int argc, char *argv[]) {
+    GLFWwindow* window;
+    if (!glfwInit()) {
+        return 1;
+    }
+    
+#ifdef TEST_X11
+    Display* x11Display = glfwGetX11Display();
+    std::cout << x11Display << std::endl;
+#endif
+#ifdef TEST_WAYLAND
+    wl_display* waylandDisplay = glfwGetWaylandDisplay();
+    std::cout << waylandDisplay << std::endl;
+#endif
 
-class PlaneFilter : public HexahedralMeshFilter {
-public:
-    virtual void filterMesh(HexMeshPtr meshIn);
+    glfwTerminate();
 
-    // Renders the GUI. The "dirty" flag might be set depending on the user's actions.
-    virtual void renderGui();
-
-protected:
-    float filterRatio = 0.0f;
-    glm::vec3 direction = glm::vec3(1.0f, 0.0f, 0.0f);
-};
-
-#endif // FILTERS_PLANEFILTER_HPP
+    return 0;
+}

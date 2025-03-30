@@ -26,17 +26,11 @@
 
 name: Handle Release
 
-#on:
-#  release:
-#    types: [created]
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
-permissions:
-    contents: write
 
 jobs:
   generate:
@@ -49,11 +43,6 @@ jobs:
             target_name: x86_64-linux
             linking: static
             shell: bash
-          # Windows targets.
-          - os: windows-2022
-            target_name: x86_64-windows-gnu
-            linking: dynamic
-            shell: 'msys2 {0}'
 
     name: "Create release-artifacts target ${{ matrix.target_name }}"
     runs-on: ${{ matrix.os }}
@@ -80,7 +69,7 @@ jobs:
       - uses: lukka/get-cmake@latest
         if: runner.os == 'Linux'
         with:
-          cmakeVersion: 3.31.6
+          cmakeVersion: 4.0.0
 
       - name: Setup vcpkg
         if: runner.os == 'Linux'
@@ -126,14 +115,7 @@ jobs:
       - name: Build target
         run: |
           BUILD_ARGS=()
-          if [ "$RUNNER_OS" == "Linux" ]; then
-              BUILD_ARGS+=(--link-static)
-              BUILD_ARGS+=(--vcpkg)
-              BUILD_ARGS+=(--vcpkg-triplet ${{env.VCPKG_DEFAULT_TRIPLET}})
-          fi
-          ./build.sh --do-not-run ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
-
-      - name: Copy files
-        run: |
-          proj_name=${{ github.event.repository.name }}
-          mv Shipping ${{ env.artifact_name }}
+          mkdir build
+          cd build
+          cmake .. -DVCPKG_TARGET_TRIPLET=${{env.VCPKG_DEFAULT_TRIPLET}} -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$projectpath/third_party/vcpkg/scripts/buildsystems/vcpkg.cmake"
+          make -j $(nproc)
